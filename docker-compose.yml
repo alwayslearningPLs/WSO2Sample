@@ -15,7 +15,7 @@ services:
   dogstore:
     image: wso2-rest-api-example:0.0.1
     build:
-      context: dogstore
+      context: go-dogstore
       dockerfile: Dockerfile
     environment:
     - POSTGRES_PASSWORD=abc123.
