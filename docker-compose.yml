@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.5-alpine
+    volumes:
+    - postgre_data:/var/lib/postgresql/data
+    - ./dogstore/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql
+    environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=dogstore
+    - POSTGRES_PASSWORD=abc123.
+    restart: always
+    networks:
+    - dogstore-net
+  dogstore:
+    image: wso2-rest-api-example:0.0.1
+    build:
+      context: dogstore
+      dockerfile: Dockerfile
+    environment:
+    - POSTGRES_PASSWORD=abc123.
+    depends_on:
+    - db
+    networks:
+      dogstore-net:
+        aliases:
+        - www.dogstore.es
+    command: ["/wait-for-it.sh", "db:5432", "--strict", "--timeout=20", "--", "/wso2-rest-api-example"]
+  wso:
+    image: wso2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - "9443:9443"
+    networks:
+      dogstore-net:
+      wso-net:
+        aliases:
+        - wso.sample
+    depends_on:
+    - dogstore
+  dogstore-client:
+    image: dogstore-client:0.0.1
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+volumes:
+  postgre_data:
+    name: postgre_data
+    external: false
+    driver: local
+networks:
+  wso-net:
+    name: wso-net
+    external: false
+  dogstore-net:
+    name: dogstore-net
+    external: false
+ 
