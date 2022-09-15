@@ -73,7 +73,7 @@ or if want to use `jq`
 
 `docker container inspect wso2sample_wso_1 --format "{{ json . }}" | jq -r '.NetworkSettings.Networks."wso-net".IPAddress'`
 
-### Publish the API
+### Pre-release the API
 
 The final step is to publish the API, because we have already tested that all (at least one endpoint) is working. Go to 'Publish > Lifecycle' and press *pre-release*
 
@@ -161,6 +161,12 @@ curl -kX POST https://localhost:9443/oauth2/token \
 #### Testing Bronze subscription
 
 Execute two times the script [prod.sh](./client/prod.sh) so you can see that after first 1000-1010 requests, server will response with *429 too many requests*
+
+### Publish the API
+
+We can finally publish the API!
+
+![rest api publish](./assets/rest_api_publish.png)
 
 ## Reference
 
