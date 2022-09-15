@@ -3,6 +3,10 @@
 # Just to be sure that no instance is running previously
 docker container rm -f dogstore-client
 
+INTERNAL_KEY="eyJraWQiOiJnYXRld2F5X2NlcnRpZmljYXRlX2FsaWFzIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJhZG1pbkBjYXJib24uc3VwZXIiLCJpc3MiOiJodHRwczpcL1wvbG9jYWxob3N0Ojk0NDNcL29hdXRoMlwvdG9rZW4iLCJrZXl0eXBlIjoiUFJPRFVDVElPTiIsInN1YnNjcmliZWRBUElzIjpbeyJzdWJzY3JpYmVyVGVuYW50RG9tYWluIjpudWxsLCJuYW1lIjoiU3dhZ2dlckRvZ3N0b3JlIiwiY29udGV4dCI6IlwvZG9nc3RvcmVcL3YxIiwicHVibGlzaGVyIjoiYWRtaW4iLCJ2ZXJzaW9uIjoidjEiLCJzdWJzY3JpcHRpb25UaWVyIjpudWxsfV0sImV4cCI6MTY2MzI3NTgxMywidG9rZW5fdHlwZSI6IkludGVybmFsS2V5IiwiaWF0IjoxNjYzMjE1ODEzLCJqdGkiOiJmMmYyZjVmYS05NDc5LTQ4NmQtOTQyZC0yZTA2MjI1ZDJiNzAifQ.G1g6YxM0L22-E9B1DXtfl1SKaYBrCIbbHmNxypmrk0NTh-0wvBr36ouZgw2tjMyU_gcms2p2A5CDI90XzjFLqKOVGKGAfYqEL842ON3M7tAlmrKmZ6ymVM2vuXFS9C39148Tkl9WOeJLd2BzSEZEqKxkuzJEEaYCDn1YxAE_dSRMLAF15HddPjo7XbBpBH8QahiR9JoizHq_xmfI5rmPXBYaiqlmmsgZcaviD4Gz2yic1Z3TclHlhHiTn3ZDRdFcxI9V5CqA90cU3AIY81E9vndH47IbsyobuFCmlEpM7WYy5-ATAVLzH_Gx29mSJtYX7qEnlHboyRADiMFkHt187g"
+
 docker container run --name dogstore-client -d \
   --network wso-net \
-  dogstore-client:0.0.1 "/client --url http://wso.sample:8280/dogstore/v1/owners --method GET --times 3000 --header \"Accept: application/json\""
+  dogstore-client:0.0.1 /bin/sh -c "/client --url http://wso.sample:8280/dogstore/v1/owners --method GET --times 10 --header \"Accept: application/json\" --header \"Internal-Key:$INTERNAL_KEY\""
+
+docker container logs dogstore-client

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"sync"
@@ -56,9 +57,20 @@ func exec(req *http.Request, times int) int32 {
 }
 
 func fetch(req *http.Request) error {
-  if res, err := (&http.Client{}).Do(req); err != nil {
+  var (
+    res *http.Response
+    err error
+  )
+
+  defer func() {
+    if res != nil {
+      log.Println(req.Method, " ", req.URL.String(), " ", res.Status)
+    }
+  }()
+
+  if res, err = (&http.Client{}).Do(req); err != nil {
     return err
-  } else if res.StatusCode > 400 {
+  } else if res.StatusCode >= 400 {
     return errStatusCodeInvalid
   }
 
