@@ -117,10 +117,10 @@ basicContent=$(echo -n ${CONSUMER_KEY}:${CONSUMER_SECRET} | base64)
 
 # password login
 curl -kX POST https://localhost:9443/oauth2/token \
-  --data "grant_type=password&username=admin&password=admin" \ # Here we specify the grant_type and values as needed
-  --header "Content-Type: application/x-www-form-urlencoded" \ # Curl knows that he needs to use this header, but it is written for clarity
-  --header "Authorization: Basic ${basicContent}" \ # We need to authorize to WSO2
-  --insecure \ # We are dealing with certs that are not in our system, so we need to "trust"
+  --data "grant_type=password&username=admin&password=admin" \
+  --header "Content-Type: application/x-www-form-urlencoded" \
+  --header "Authorization: Basic ${basicContent}" \
+  --insecure \
   | jq .
 
 # credentials login
@@ -157,6 +157,10 @@ curl -kX POST https://localhost:9443/oauth2/token \
 #### Test for client credentials
 
 ![rest api grant type client credentials success](./assets/rest_api_grant_type_client_credentials_success.png)
+
+#### Testing Bronze subscription
+
+Execute two times the script [prod.sh](./client/prod.sh) so you can see that after first 1000-1010 requests, server will response with *429 too many requests*
 
 ## Reference
 

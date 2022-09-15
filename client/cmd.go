@@ -31,7 +31,11 @@ func newRootCmd() *cobra.Command {
         log.Println("time from the beginning till the end is: ", int(time.Since(now) / time.Second))
       }()
 
-      success := exec(r, req.times)
+      var success int32
+      for i := 0; i < 10; i++ {
+        success += exec(r, req.times / 10)
+        time.Sleep(500 * time.Millisecond)
+      }
 
       log.Printf("%d - %d = %d", req.times, success, req.times - int(success))
     },
